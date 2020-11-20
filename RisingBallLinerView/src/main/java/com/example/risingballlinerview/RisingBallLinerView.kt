@@ -187,5 +187,28 @@ class RisingBallLinerView(ctx : Context) : View(ctx) {
                 curr.startUpdating(cb)
             }
         }
+
+        data class Renderer(var view : RisingBallLinerView) {
+
+            private val animator : Animator = Animator(view)
+            private val paint : Paint = Paint(Paint.ANTI_ALIAS_FLAG)
+            private val rbl : RisingBallLiner = RisingBallLiner(0)
+
+            fun render(canvas : Canvas) {
+                canvas.drawColor(backColor)
+                rbl.draw(canvas, paint)
+                animator.animate {
+                    rbl.update {
+                        animator.stop()
+                    }
+                }
+            }
+
+            fun handleTap() {
+                rbl.startUpdating {
+                    animator.start()
+                }
+            }
+        }
     }
 }
