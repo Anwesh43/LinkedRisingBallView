@@ -65,14 +65,16 @@ fun Canvas.drawRBLNode(i : Int, scale : Float, paint : Paint) {
 
 class RisingBallLinerView(ctx : Context) : View(ctx) {
 
-    override fun onDraw(canvas : Canvas) {
+    private val renderer : Renderer = Renderer(this)
 
+    override fun onDraw(canvas : Canvas) {
+        renderer.render(canvas)
     }
 
     override fun onTouchEvent(event : MotionEvent) : Boolean {
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
-
+                renderer.handleTap()
             }
         }
         return true
@@ -187,27 +189,26 @@ class RisingBallLinerView(ctx : Context) : View(ctx) {
                 curr.startUpdating(cb)
             }
         }
+    }
+    data class Renderer(var view : RisingBallLinerView) {
 
-        data class Renderer(var view : RisingBallLinerView) {
+        private val animator : Animator = Animator(view)
+        private val paint : Paint = Paint(Paint.ANTI_ALIAS_FLAG)
+        private val rbl : RBLNode.RisingBallLiner = RBLNode.RisingBallLiner(0)
 
-            private val animator : Animator = Animator(view)
-            private val paint : Paint = Paint(Paint.ANTI_ALIAS_FLAG)
-            private val rbl : RisingBallLiner = RisingBallLiner(0)
-
-            fun render(canvas : Canvas) {
-                canvas.drawColor(backColor)
-                rbl.draw(canvas, paint)
-                animator.animate {
-                    rbl.update {
-                        animator.stop()
-                    }
+        fun render(canvas : Canvas) {
+            canvas.drawColor(backColor)
+            rbl.draw(canvas, paint)
+            animator.animate {
+                rbl.update {
+                    animator.stop()
                 }
             }
+        }
 
-            fun handleTap() {
-                rbl.startUpdating {
-                    animator.start()
-                }
+        fun handleTap() {
+            rbl.startUpdating {
+                animator.start()
             }
         }
     }
