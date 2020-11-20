@@ -1,0 +1,3 @@
+include ':RisingBallLinerView'
+include ':app'
+rootProject.name = "LinkedRisingBallLinerView"
