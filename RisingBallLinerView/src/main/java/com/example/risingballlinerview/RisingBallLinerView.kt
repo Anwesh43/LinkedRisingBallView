@@ -212,4 +212,13 @@ class RisingBallLinerView(ctx : Context) : View(ctx) {
             }
         }
     }
+
+    companion object {
+
+        fun create(activity : Activity) : RisingBallLinerView {
+            val view : RisingBallLinerView = RisingBallLinerView(activity)
+            activity.setContentView(view)
+            return view
+        }
+    }
 }
